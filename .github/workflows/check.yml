@@ -1,0 +1,29 @@
+name: Check reforms
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate reforms and sources
+        run: node .cli/reforms.mjs check
+      # data/ is rebuilt on main after merge; edits here would conflict between pull requests.
+      - name: data/ must not be edited
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if ! git diff --quiet "$BASE"...HEAD -- data/; then
+            echo "::error::This pull request changes data/. Undo with: git checkout origin/main -- data/"
+            exit 1
+          fi

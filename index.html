@@ -249,7 +249,8 @@
     $('dhead').innerHTML = '<h2>' + esc(r.title) + '</h2><div class="path">' + esc(r.path) + '</div><div class="dmeta">' +
       D.metrics.map(function (m) { return '<span class="pill ' + tone(m, r[m.key]) + '" title="' + esc(m.help) + '"><b>' + m.label + ':</b> ' + r[m.key] + '</span>'; }).join('') +
       '<span class="pill plain"><b>Score:</b> ' + r.score + '</span><span class="pill plain">' + esc(r.status) + '</span>' +
-      (r.video ? '<a class="pill plain" href="' + esc(r.video) + '" target="_blank" rel="noopener">Watch video</a>' : '') + '</div>' +
+      (r.video ? '<a class="pill plain" href="' + esc(r.video) + '" target="_blank" rel="noopener">Watch video</a>' : '') +
+      (r.pitch ? '<a class="pill plain" href="' + esc(r.path + '/' + r.pitch) + '">Pitch deck (.pptx)</a>' : '') + '</div>' +
       '<div class="dtabs">' + tabs.map(function (t) { return '<button class="tab' + (state.dtab === t[0] ? ' on' : '') + '" data-dtab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
 
     var body;

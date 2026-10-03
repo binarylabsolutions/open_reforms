@@ -1,0 +1,57 @@
+{
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "statuses": [
+    "idea",
+    "research",
+    "proposal",
+    "production",
+    "published"
+  ],
+  "scopes": [
+    "city",
+    "provincial",
+    "federal"
+  ],
+  "metrics": [
+    {
+      "key": "impact",
+      "label": "Impact",
+      "better": "high",
+      "weight": 2,
+      "help": "How much better life gets, and for how many people."
+    },
+    {
+      "key": "cost",
+      "label": "Cost",
+      "better": "low",
+      "weight": 1,
+      "help": "Public money needed up front and to keep it running."
+    },
+    {
+      "key": "difficulty",
+      "label": "Difficulty",
+      "better": "low",
+      "weight": 1,
+      "help": "How hard it is to build and operate (skills, systems, coordination)."
+    },
+    {
+      "key": "resistance",
+      "label": "Resistance",
+      "better": "low",
+      "weight": 1,
+      "help": "Political and vested-interest pushback against passing it."
+    },
+    {
+      "key": "time",
+      "label": "Time",
+      "better": "low",
+      "weight": 1,
+      "help": "How long before citizens see results."
+    }
+  ],
+  "reforms": []
+}

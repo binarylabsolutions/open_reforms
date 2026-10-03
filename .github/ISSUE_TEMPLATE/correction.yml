@@ -1,0 +1,25 @@
+name: Correction
+description: Report a wrong number, a dead link, or a source that does not say what we claim.
+title: "Correction: "
+labels: ["correction"]
+body:
+  - type: input
+    id: reform
+    attributes:
+      label: Which reform?
+      placeholder: 001 Metro stations as commercial hubs
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What is wrong?
+      description: Quote the sentence.
+    validations:
+      required: true
+  - type: textarea
+    id: right
+    attributes:
+      label: What is correct, and what is the source?
+    validations:
+      required: true

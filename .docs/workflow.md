@@ -12,18 +12,27 @@ A reform moves through five statuses. Set `status` in `proposal.md` as it moves.
 
 ## Steps
 
-1. **Create.** `node .cli/reforms.mjs new "Title"` makes `reforms/NNN-title/` from `reforms/_template/`.
-2. **Research.** Fill the Sources checklist in `proposal.md`. Every number links to a source.
-3. **Write the proposal.** Problem in Pakistan, how others solved it, the proposal, scorecard, risks, pilot.
-4. **Write the presentation.** In `presentation.md`, one section per slide: an image prompt and the narration.
-5. **Generate images.** Save to `images/` as `01.png`, `02.png`, ... matching slide numbers.
-6. **Make the video.** Each image stays on screen while its narration plays.
-7. **Publish.** Set `video:` and `status: published`.
-8. **Rebuild.** `node .cli/reforms.mjs build` (or double-click `update.cmd`) after any change, and commit `data/` with it.
+1. **Idea issue.** Opened by anyone. A maintainer accepts it and assigns the number. Ideas are accepted one at a time.
+2. **Create.** `node .cli/reforms.mjs new "Title" NNN` makes `reforms/NNN-title/` from `reforms/_template/`, on its own branch.
+3. **Draft pull request.** Opened early, at status `research`, so sources are found in the open.
+4. **Research.** Each claim under `## To verify` is replaced by a cited number and a reference. Rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
+5. **Write the proposal.** Problem in Pakistan, how others solved it, the proposal, scorecard, risks, pilot.
+6. **Review and merge.** A reviewer opens every reference. Status becomes `proposal`. The check must pass.
+7. **Write the presentation.** In `presentation.md`, one section per slide: an image prompt and the narration. Optional `pitch.pptx` for the elevator pitch.
+8. **Generate images.** Content prompt from the slide plus the style block in [image-style.md](image-style.md). Saved to `images/` as `01.png`, `02.png`, ... matching slide numbers.
+9. **Make the short.** Vertical video for Instagram Reels and YouTube Shorts: each image stays on screen while its narration plays.
+10. **Publish.** `video:` is set and `status: published`.
+
+## After publishing
+
+A published reform stays open. Expert calls (see [CONTRIBUTING.md](../CONTRIBUTING.md#experts)) and corrections feed back into `proposal.md` through pull requests. A reform with enough expert input becomes a long-form video; its link is added to the proposal.
+
+`data/` is rebuilt and committed by GitHub Actions after every merge to `main`. Pull requests never include it.
 
 ## Rules
 
-- Folder names are `NNN-short-name`, lowercase with dashes. Numbers are never reused.
+- One reform per pull request. Folder names are `NNN-short-name`, lowercase with dashes. Numbers are never reused.
+- No number without a verified source. Numbers in the video and the deck come from `proposal.md`.
 - Be honest in the scorecard. A reform that scores badly is still worth a video if it explains why.
 - State the strongest objection and answer it.
-- The repo is public forever: no private notes, no unlicensed images, no unsourced numbers.
+- The repo is public forever: no private notes, no unlicensed images.

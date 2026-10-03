@@ -1,6 +1,10 @@
 # {{title}}: presentation
 
 Each slide is one image on screen plus the narration spoken over it.
+This is a vertical short: keep the whole narration to about 150 words (60 seconds).
+
+Image prompts describe content only; add the style block from `.docs/image-style.md`.
+No text inside images: titles, figures and the scorecard are added in the editor.
 Save images in `images/` named by slide number: `01.png`, `02.png`, ...
 
 ## Slide 1: Hook
@@ -9,7 +13,7 @@ Save images in `images/` named by slide number: `01.png`, `02.png`, ...
 
 **Image prompt:** What the AI image should show.
 
-**Narration:** What is said while this image is on screen.
+**Narration:** What is said while this image is on screen. Numbers must appear, cited, in `proposal.md`.
 
 ## Slide 2: The problem in Pakistan
 

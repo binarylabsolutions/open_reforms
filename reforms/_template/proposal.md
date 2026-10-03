@@ -17,7 +17,7 @@ video:
 
 ## The problem in Pakistan
 
-What is broken today, who pays for it, and how much.
+What is broken today, who pays for it, and how much. Every number carries a citation like `[1]`.
 
 ## How others solved it
 
@@ -45,6 +45,11 @@ What Pakistan should do, step by step. Who owns it.
 
 The smallest version that proves it works.
 
-## Sources
+## References
 
-- [ ] Every number in this proposal links to a source here.
+Numbered list. Cite in the text as `[1]`. Format:
+`Author or organisation. Title, page or table. URL (accessed YYYY-MM-DD). Supports: the exact figure or claim.`
+
+## To verify
+
+- [ ] Claims and numbers still waiting for a source. Remove this section when empty.

@@ -1,0 +1,36 @@
+name: Reform idea
+description: Suggest something that works in another country and could work in Pakistan.
+title: "Idea: "
+labels: ["idea"]
+body:
+  - type: input
+    id: what
+    attributes:
+      label: The idea in one sentence
+      placeholder: Fund cheap metro fares with shop rent at stations.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where does it already work?
+      placeholder: Hong Kong, Japan
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem in Pakistan does it fix?
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Links
+      description: Any source showing it works abroad. Primary sources are best.
+  - type: checkboxes
+    id: write
+    attributes:
+      label: Would you write it?
+      options:
+        - label: I would like to write this reform if it is accepted.
