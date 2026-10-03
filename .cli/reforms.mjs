@@ -13,6 +13,9 @@ const TEMPLATE_DIR = path.join(REFORMS_DIR, '_template');
 const LEVELS = ['low', 'medium', 'high'];
 const STATUSES = ['idea', 'research', 'proposal', 'production', 'published'];
 const SCOPES = ['city', 'provincial', 'federal'];
+// What AI was used for in a reform; disclosed on the dashboard. See AI_POLICY.md.
+const AI_USES = ['none', 'research', 'drafting', 'translation', 'images', 'narration'];
+const TRANSLATIONS = ['ai', 'human'];
 
 // `better` says which end of the scale is good; `weight` feeds the score.
 const METRICS = [
@@ -136,6 +139,19 @@ function loadReform(folder, errors, warnings) {
   for (const m of METRICS) if (!LEVELS.includes(meta[m.key])) err(`${m.key} must be one of: ${LEVELS.join(', ')}`);
 
   const strict = SOURCED.has(meta.status);
+  const list = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+  const aiUse = list(meta.ai_use).map((s) => s.toLowerCase());
+  for (const u of aiUse) if (!AI_USES.includes(u)) err(`ai_use "${u}" must be one of: ${AI_USES.join(', ')}`);
+  if (strict) {
+    if (!meta.author) err('missing "author" (whose idea this is)');
+    if (!meta.verified_by) err('missing "verified_by" (the person who opened every source)');
+    if (!aiUse.length) err('missing "ai_use" (write [none] if no AI was used)');
+  }
+
+  // Optional Urdu version; its frontmatter says who or what translated it.
+  const urFile = path.join(dir, 'proposal.ur.md');
+  const ur = fs.existsSync(urFile) ? parseFrontmatter(read(urFile)) : null;
+  if (ur && !TRANSLATIONS.includes(ur.meta?.translation)) err(`proposal.ur.md needs frontmatter "translation": ${TRANSLATIONS.join(' or ')}`);
   for (const p of checkSources(body, strict)) (strict ? errors : warnings).push(`reforms/${folder}: ${p}`);
 
   const presFile = path.join(dir, 'presentation.md');
@@ -152,14 +168,20 @@ function loadReform(folder, errors, warnings) {
     summary: meta.summary || '',
     sector: (meta.sector || '').toLowerCase(),
     scope: meta.scope || '',
-    countries: Array.isArray(meta.countries) ? meta.countries : meta.countries ? [meta.countries] : [],
+    countries: list(meta.countries),
     status: meta.status || '',
     video: meta.video || '',
+    author: meta.author || '',
+    ai_use: aiUse,
+    ai_tools: list(meta.ai_tools),
+    verified_by: meta.verified_by || '',
   };
   for (const m of METRICS) reform[m.key] = meta[m.key] || '';
   reform.score = score(meta);
   reform.proposal = body;
   reform.presentation = fs.existsSync(presFile) ? parseFrontmatter(read(presFile)).body : '';
+  reform.proposal_ur = ur ? ur.body : '';
+  reform.translation = ur ? { by: ur.meta?.translation || '', reviewed_by: ur.meta?.reviewed_by || '' } : null;
   reform.images = images;
   reform.pitch = fs.existsSync(path.join(dir, 'pitch.pptx')) ? 'pitch.pptx' : '';
   return reform;

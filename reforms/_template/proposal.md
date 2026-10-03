@@ -11,6 +11,10 @@ difficulty: medium
 resistance: medium
 time: medium
 video:
+author:
+ai_use: []
+ai_tools: []
+verified_by:
 ---
 
 # {{title}}
@@ -21,7 +25,7 @@ What is broken today, who pays for it, and how much. Every number carries a cita
 
 ## How others solved it
 
-Which country, what exactly they do, and the results they got.
+Which country, what exactly they do, and the results they got. If nothing comparable exists anywhere, say so here and explain what the idea is based on instead.
 
 ## The proposal
 

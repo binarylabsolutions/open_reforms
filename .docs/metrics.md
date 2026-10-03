@@ -37,7 +37,11 @@ The dashboard's **Quick wins** button shows reforms with high impact and nothing
 | `status` | `idea`, `research`, `proposal`, `production`, `published` |
 | `scope` | `city`, `provincial`, `federal`: who has the power to do it |
 | `sector` | Free text, one word, lowercase (`transport`, `tax`, `governance`, ...) |
-| `countries` | List of countries the idea comes from: `[Japan, Hong Kong]` |
+| `countries` | Countries where something similar works: `[Japan, Hong Kong]`. Empty `[]` when there is none. |
 | `video` | YouTube URL once published |
+| `author` | The person whose idea it is |
+| `ai_use` | List from `none`, `research`, `drafting`, `translation`, `images`, `narration` |
+| `ai_tools` | List of AI tools used, for example `[Claude]` |
+| `verified_by` | The person who opened every source |
 
 The metric definitions and the formula live in `.cli/reforms.mjs`. Change them there and rebuild.

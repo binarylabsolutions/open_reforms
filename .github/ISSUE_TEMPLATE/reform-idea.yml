@@ -1,5 +1,5 @@
 name: Reform idea
-description: Suggest something that works in another country and could work in Pakistan.
+description: Suggest a structural reform for Pakistan.
 title: "Idea: "
 labels: ["idea"]
 body:
@@ -13,10 +13,8 @@ body:
   - type: input
     id: where
     attributes:
-      label: Where does it already work?
+      label: Does something similar already work anywhere? (optional)
       placeholder: Hong Kong, Japan
-    validations:
-      required: true
   - type: textarea
     id: problem
     attributes:
@@ -27,7 +25,7 @@ body:
     id: sources
     attributes:
       label: Links
-      description: Any source showing it works abroad. Primary sources are best.
+      description: Any source on the problem or on where a similar idea has been tried. Primary sources are best.
   - type: checkboxes
     id: write
     attributes:

@@ -15,13 +15,14 @@ Questions and discussion: [Discord](https://discord.gg/wKVNcYcgq). Decisions and
 | Add sources to a reform in `research` | Pull request on that reform's folder |
 | Write a full reform | Get the idea accepted first, then one pull request |
 | Argue that a reform would fail in Pakistan | Comment on its issue or pull request. This is welcome. |
+| Review an Urdu translation | Read `proposal.ur.md` against the English, fix it, add your name to `reviewed_by` |
 | Share professional experience | See [Experts](#experts) |
 
 ## How a reform gets made
 
 One reform = one issue = one pull request.
 
-1. **Idea.** Open a Reform idea issue: what works abroad, where, and why Pakistan needs it.
+1. **Idea.** Open a Reform idea issue: the idea, the problem it fixes in Pakistan, and any place where something similar already works. A foreign example helps but is not required.
 2. **Accepted.** A maintainer labels it `accepted` and gives it a number (for example `007`). Ideas are accepted one at a time, so not every good idea is picked up immediately.
 3. **Claim it.** Comment on the issue that you are taking it, so two people do not write the same thing.
 4. **Write.** Fork the repo, create `reforms/007-short-name/` from `reforms/_template/`, and open a **draft** pull request early. Research in the open.
@@ -46,7 +47,9 @@ These are the rules that matter most. A proposal that breaks them is not merged.
 
 ### Using AI
 
-AI tools may help with drafting, structure and language. They invent numbers and sources. Anything an AI gives you is unverified until you have opened the original document and found it there. Rule 4 applies with no exceptions.
+You are welcome to use AI for drafting, structure, translation and finding leads. AI tools also invent numbers and sources. Anything an AI gives you is unverified until you have opened the original document and found it there. Rule 4 applies with no exceptions.
+
+Disclose it: fill `author`, `ai_use`, `ai_tools` and `verified_by` at the top of `proposal.md`. The full rules are in [AI_POLICY.md](AI_POLICY.md).
 
 ### What the automatic check does
 
@@ -55,7 +58,8 @@ Every pull request runs `node .cli/reforms.mjs check`. From status `proposal` on
 - a line contains a number with no `[n]` citation,
 - a citation has no matching reference, or a reference is never cited,
 - a reference has no URL or no accessed date,
-- any `- [ ]` item is still unchecked.
+- any `- [ ]` item is still unchecked,
+- `author`, `ai_use` or `verified_by` is missing.
 
 The check cannot tell whether a source really says what you claim. Human review does that.
 
@@ -68,6 +72,7 @@ Set `status` at the top of `proposal.md`: `idea` → `research` → `proposal` �
 | File | What |
 |---|---|
 | `proposal.md` | The written proposal with ratings, scorecard and references |
+| `proposal.ur.md` | Optional Urdu translation, marked `translation: ai` or `human` |
 | `presentation.md` | The video: one image prompt and one narration per slide |
 | `images/` | Images for the video, `01.png`, `02.png`, ... |
 | `pitch.pptx` | Optional elevator-pitch deck |
@@ -119,6 +124,10 @@ node .cli/reforms.mjs build
 ```
 
 `build` refreshes `data/` so you can preview in `index.html`. Do not commit the `data/` changes.
+
+## Licence
+
+By contributing you agree that your text and images are published under [CC BY 4.0](LICENSE) and your code under [MIT](LICENSE-CODE).
 
 ## Conduct
 

@@ -4,7 +4,7 @@
 
 It is easy to name a problem. It is hard to find a solution that fits inside what is actually possible: the budget, the institutions, the politics, the time. Open Reform exists to practise that harder part in public.
 
-We take something that already works in another country, ask what it would take to do it in Pakistan, and score it honestly. The aim is a better conversation about problem solving, and a public shelf of proposals that anyone can pick up and use.
+We take a structural problem, propose a fix, look at how other countries handled it where they have, ask what it would take to do it in Pakistan, and score it honestly. The aim is a better conversation about problem solving, and a public shelf of proposals that anyone can pick up and use.
 
 ## What we hold to
 
@@ -14,8 +14,9 @@ We take something that already works in another country, ask what it would take 
 4. **Honest about trade-offs.** We state the strongest argument against each proposal. A reform that scores badly is still worth explaining.
 5. **Feasible, not ideal.** We look for what can be done from where Pakistan is today, starting with a small pilot.
 6. **A starting point, not the final word.** Each proposal is a draft for people who know more than we do to correct and improve.
-7. **Open, permanently.** Everything is public and free to use: proposals, sources, scripts and data.
-8. **Respect.** We argue about ideas and evidence, never about people.
+7. **Honest about how it is made.** We use AI to draft, translate and illustrate, and we say where. People choose the ideas, verify the facts and answer for the result.
+8. **Open, permanently.** Everything is public and free to use: proposals, sources, scripts and data.
+9. **Respect.** We argue about ideas and evidence, never about people.
 
 ## What we are not
 

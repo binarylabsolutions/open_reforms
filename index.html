@@ -70,6 +70,9 @@
   .dtabs { display: flex; gap: 4px; margin-top: 8px; }
   .dbody { padding: 8px 20px 40px; overflow-y: auto; flex: 1; }
   .path { color: var(--muted); font-size: 12px; }
+  .credit { color: var(--muted); font-size: 12.5px; margin: 6px 0 2px; }
+  .notice { margin: 12px 0; padding: 8px 12px; border-radius: 6px; background: var(--mid-bg); color: var(--mid); font-size: 13px; }
+  .rtl { direction: rtl; text-align: right; font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Segoe UI", Tahoma, sans-serif; line-height: 2; }
 
   .md h1 { font-size: 20px; } .md h2 { font-size: 16px; margin-top: 24px; padding-bottom: 4px; border-bottom: 1px solid var(--line); } .md h3 { font-size: 14px; }
   .md a { color: var(--accent); }
@@ -86,7 +89,7 @@
 <body>
 <header>
   <h1>Open <span>Reform</span></h1>
-  <p class="tagline">Proven ideas from around the world, scored and proposed for Pakistan.</p>
+  <p class="tagline">Reform ideas for Pakistan, scored honestly and open to everyone.</p>
 </header>
 <nav class="tabs" id="tabs"></nav>
 <div class="filters" id="filters"></div>
@@ -178,7 +181,7 @@
 
     var rows = visible();
     $('count').textContent = rows.length + ' of ' + D.reforms.length;
-    if (!rows.length) { $('tbody').innerHTML = '<tr><td class="empty" colspan="' + COLS.length + '">No reforms match these filters.</td></tr>'; return; }
+    if (!rows.length) { $('tbody').innerHTML = '<tr><td class="empty" colspan="' + COLS.length + '">' + (D.reforms.length ? 'No reforms match these filters.' : 'No reforms published yet.') + '</td></tr>'; return; }
     $('tbody').innerHTML = rows.map(function (r) {
       return '<tr data-id="' + r.id + '"><td class="num">' + r.id + '</td>' +
         '<td><div class="title">' + esc(r.title) + '</div><div class="sub">' + esc(r.summary) + '</div></td>' +
@@ -245,8 +248,9 @@
     var r = D.reforms.filter(function (x) { return x.id === state.open; })[0];
     document.body.classList.toggle('open', !!r);
     if (!r) return;
-    var tabs = [['proposal', 'Proposal'], ['presentation', 'Presentation'], ['images', 'Images (' + r.images.length + ')']];
-    $('dhead').innerHTML = '<h2>' + esc(r.title) + '</h2><div class="path">' + esc(r.path) + '</div><div class="dmeta">' +
+    var tabs = [['proposal', 'Proposal']].concat(r.proposal_ur ? [['proposal_ur', 'اردو']] : [], [['presentation', 'Presentation'], ['images', 'Images (' + r.images.length + ')']]);
+    var credit = [r.author ? 'Idea: ' + r.author : '', r.ai_use.length ? 'AI used for: ' + r.ai_use.join(', ') + (r.ai_tools.length ? ' (' + r.ai_tools.join(', ') + ')' : '') : '', 'Sources verified by: ' + (r.verified_by || 'not yet verified')].filter(Boolean).join(' · ');
+    $('dhead').innerHTML = '<h2>' + esc(r.title) + '</h2><div class="path">' + esc(r.path) + '</div><div class="credit">' + esc(credit) + '</div><div class="dmeta">' +
       D.metrics.map(function (m) { return '<span class="pill ' + tone(m, r[m.key]) + '" title="' + esc(m.help) + '"><b>' + m.label + ':</b> ' + r[m.key] + '</span>'; }).join('') +
       '<span class="pill plain"><b>Score:</b> ' + r.score + '</span><span class="pill plain">' + esc(r.status) + '</span>' +
       (r.video ? '<a class="pill plain" href="' + esc(r.video) + '" target="_blank" rel="noopener">Watch video</a>' : '') +
@@ -258,6 +262,14 @@
       body = r.images.length
         ? '<div class="grid">' + r.images.map(function (f) { var u = r.path + '/images/' + encodeURIComponent(f); return '<figure><a href="' + u + '" target="_blank"><img src="' + u + '" alt="' + esc(f) + '"></a><figcaption>' + esc(f) + '</figcaption></figure>'; }).join('') + '</div>'
         : '<p class="empty">No images yet. Add them to <code>' + esc(r.path) + '/images/</code> and rebuild.</p>';
+    } else if (state.dtab === 'proposal_ur') {
+      // The English proposal is the authoritative text; say how the Urdu one was made.
+      var t = r.translation, ai = t.by === 'ai';
+      var note = ai
+        ? 'یہ ترجمہ مصنوعی ذہانت (AI) کی مدد سے کیا گیا ہے۔ اصل انگریزی متن مستند ہے۔'
+        : '';
+      var en = (ai ? 'AI-translated from the English proposal. ' : 'Translated from the English proposal. ') + (t.reviewed_by ? 'Reviewed by ' + t.reviewed_by + '. ' : (ai ? 'Not yet reviewed by a human. ' : '')) + 'The English version is authoritative.';
+      body = '<div class="notice">' + (note ? '<div class="rtl">' + note + '</div>' : '') + esc(en) + '</div><div class="rtl">' + md(r.proposal_ur, r.path) + '</div>';
     } else {
       body = r[state.dtab] ? md(r[state.dtab], r.path) : '<p class="empty">Nothing written yet.</p>';
     }

@@ -18,10 +18,11 @@ A reform moves through five statuses. Set `status` in `proposal.md` as it moves.
 4. **Research.** Each claim under `## To verify` is replaced by a cited number and a reference. Rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 5. **Write the proposal.** Problem in Pakistan, how others solved it, the proposal, scorecard, risks, pilot.
 6. **Review and merge.** A reviewer opens every reference. Status becomes `proposal`. The check must pass.
-7. **Write the presentation.** In `presentation.md`, one section per slide: an image prompt and the narration. Optional `pitch.pptx` for the elevator pitch.
-8. **Generate images.** Content prompt from the slide plus the style block in [image-style.md](image-style.md). Saved to `images/` as `01.png`, `02.png`, ... matching slide numbers.
-9. **Make the short.** Vertical video for Instagram Reels and YouTube Shorts: each image stays on screen while its narration plays.
-10. **Publish.** `video:` is set and `status: published`.
+7. **Translate.** Optional `proposal.ur.md`, made after the English is final. Rules: [AI_POLICY.md](../AI_POLICY.md).
+8. **Write the presentation.** In `presentation.md`, one section per slide: an image prompt and the narration. Optional `pitch.pptx` for the elevator pitch.
+9. **Generate images.** Content prompt from the slide plus the style block in [image-style.md](image-style.md). Saved to `images/` as `01.png`, `02.png`, ... matching slide numbers.
+10. **Make the short.** Vertical video for Instagram Reels and YouTube Shorts: each image stays on screen while its narration plays.
+11. **Publish.** `video:` is set and `status: published`. The video description discloses AI images and voice.
 
 ## After publishing
 
