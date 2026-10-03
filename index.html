@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Reform</title>
+<style>
+  :root {
+    --bg: #f6f7f5; --panel: #ffffff; --ink: #17201b; --muted: #66706a; --line: #e2e6e1;
+    --accent: #0b6b43; --accent-soft: #e3f1ea;
+    --good: #0b6b43; --good-bg: #dff1e7; --mid: #7a5a00; --mid-bg: #f8edc9; --bad: #a12b23; --bad-bg: #f9dfdc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111613; --panel: #19201c; --ink: #e8ede9; --muted: #98a39c; --line: #2a332e;
+      --accent: #4fc48d; --accent-soft: #1d3329;
+      --good: #6fd6a3; --good-bg: #173326; --mid: #e6c35a; --mid-bg: #3a3116; --bad: #f08a80; --bad-bg: #40201d;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 20px 24px 0; }
+  h1 { margin: 0; font-size: 22px; letter-spacing: -0.01em; }
+  h1 span { color: var(--accent); }
+  .tagline { margin: 2px 0 0; color: var(--muted); }
+
+  .tabs { display: flex; gap: 4px; padding: 16px 24px 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .tab { border: 0; background: none; color: var(--muted); font: inherit; padding: 8px 12px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; text-transform: capitalize; }
+  .tab:hover { color: var(--ink); }
+  .tab.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  .tab small { margin-left: 6px; padding: 1px 6px; border-radius: 10px; background: var(--line); color: var(--muted); font-weight: 400; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 24px; align-items: end; }
+  .filters label { display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .filters input, .filters select, .btn { font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+  .filters input { width: 200px; }
+  .btn { cursor: pointer; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .count { margin-left: auto; color: var(--muted); align-self: center; }
+
+  .wrap { padding: 0 24px 40px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); cursor: pointer; user-select: none; white-space: nowrap; }
+  th:hover { color: var(--ink); }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: var(--accent-soft); }
+  tbody tr:last-child td { border-bottom: 0; }
+  .num { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .title { font-weight: 600; }
+  .sub { color: var(--muted); font-size: 12.5px; max-width: 520px; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; text-transform: capitalize; white-space: nowrap; }
+  .good { color: var(--good); background: var(--good-bg); }
+  .mid { color: var(--mid); background: var(--mid-bg); }
+  .bad { color: var(--bad); background: var(--bad-bg); }
+  .plain { color: var(--muted); background: var(--line); }
+  .score { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .empty { padding: 40px; text-align: center; color: var(--muted); }
+
+  .shade { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: none; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(860px, 100%); background: var(--panel); border-left: 1px solid var(--line); display: none; flex-direction: column; }
+  .open .shade { display: block; }
+  .open .drawer { display: flex; }
+  .dhead { padding: 16px 20px 0; border-bottom: 1px solid var(--line); }
+  .dhead h2 { margin: 0 32px 4px 0; font-size: 19px; }
+  .dmeta { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px; }
+  .dmeta .pill b { font-weight: 600; }
+  .close { position: absolute; top: 12px; right: 14px; border: 0; background: none; color: var(--muted); font-size: 22px; cursor: pointer; }
+  .dtabs { display: flex; gap: 4px; margin-top: 8px; }
+  .dbody { padding: 8px 20px 40px; overflow-y: auto; flex: 1; }
+  .path { color: var(--muted); font-size: 12px; }
+
+  .md h1 { font-size: 20px; } .md h2 { font-size: 16px; margin-top: 24px; padding-bottom: 4px; border-bottom: 1px solid var(--line); } .md h3 { font-size: 14px; }
+  .md a { color: var(--accent); }
+  .md img { max-width: 100%; border-radius: 6px; border: 1px solid var(--line); }
+  .md code { background: var(--line); padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+  .md pre { background: var(--line); padding: 10px; border-radius: 6px; overflow-x: auto; } .md pre code { background: none; padding: 0; }
+  .md blockquote { margin: 12px 0; padding: 2px 12px; border-left: 3px solid var(--accent); color: var(--muted); }
+  .md table { margin: 12px 0; } .md td, .md th { cursor: default; }
+  .md li.task { list-style: none; margin-left: -20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; padding-top: 12px; }
+  .grid figure { margin: 0; } .grid img { width: 100%; border-radius: 6px; border: 1px solid var(--line); display: block; } .grid figcaption { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Open <span>Reform</span></h1>
+  <p class="tagline">Proven ideas from around the world, scored and proposed for Pakistan.</p>
+</header>
+<nav class="tabs" id="tabs"></nav>
+<div class="filters" id="filters"></div>
+<div class="wrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer">
+  <button class="close" id="close" aria-label="Close">&times;</button>
+  <div class="dhead" id="dhead"></div>
+  <div class="dbody md" id="dbody"></div>
+</aside>
+
+<script src="data/reforms.js"></script>
+<script>
+(function () {
+  var D = window.OPEN_REFORMS;
+  var $ = function (id) { return document.getElementById(id); };
+  if (!D) {
+    $('tbody').innerHTML = '<tr><td class="empty">No data found. Run <code>node .cli/reforms.mjs build</code> (or double-click <code>update.cmd</code>), then reload.</td></tr>';
+    return;
+  }
+
+  var state = { status: 'all', q: '', sector: '', scope: '', quick: false, sort: 'score', dir: -1, open: null, dtab: 'proposal' };
+  D.metrics.forEach(function (m) { state[m.key] = ''; });
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function uniq(key) { return Array.from(new Set(D.reforms.map(function (r) { return r[key]; }).filter(Boolean))).sort(); }
+  function rank(v) { return D.levels.indexOf(v); }
+
+  // Colour by whether the level is good news for this metric, not by the level itself.
+  function tone(m, v) {
+    if (v === 'medium') return 'mid';
+    return (v === m.better) ? 'good' : 'bad';
+  }
+  function pill(m, v) { return '<span class="pill ' + tone(m, v) + '">' + esc(v) + '</span>'; }
+
+  function isQuickWin(r) { return r.impact === 'high' && r.cost !== 'high' && r.difficulty !== 'high' && r.resistance !== 'high'; }
+
+  function visible() {
+    var q = state.q.toLowerCase();
+    return D.reforms.filter(function (r) {
+      if (state.status !== 'all' && r.status !== state.status) return false;
+      if (state.sector && r.sector !== state.sector) return false;
+      if (state.scope && r.scope !== state.scope) return false;
+      if (state.quick && !isQuickWin(r)) return false;
+      for (var i = 0; i < D.metrics.length; i++) { var k = D.metrics[i].key; if (state[k] && r[k] !== state[k]) return false; }
+      if (q && (r.title + ' ' + r.summary + ' ' + r.sector + ' ' + r.countries.join(' ')).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) {
+      var k = state.sort, x = a[k], y = b[k];
+      if (D.levels.indexOf(x) >= 0) { x = rank(x); y = rank(y); }
+      else if (k === 'status') { x = D.statuses.indexOf(x); y = D.statuses.indexOf(y); }
+      else if (k === 'countries') { x = x.join(); y = y.join(); }
+      return (x < y ? -1 : x > y ? 1 : a.id < b.id ? -1 : 1) * state.dir;
+    });
+  }
+
+  function renderTabs() {
+    var html = ['all'].concat(D.statuses).map(function (s) {
+      var n = s === 'all' ? D.reforms.length : D.reforms.filter(function (r) { return r.status === s; }).length;
+      return '<button class="tab' + (state.status === s ? ' on' : '') + '" data-status="' + s + '">' + s + '<small>' + n + '</small></button>';
+    }).join('');
+    $('tabs').innerHTML = html;
+  }
+
+  function select(key, label, options, title) {
+    return '<label title="' + esc(title || '') + '">' + esc(label) + '<select data-key="' + key + '"><option value="">Any</option>' +
+      options.map(function (o) { return '<option value="' + esc(o) + '"' + (state[key] === o ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select></label>';
+  }
+
+  function renderFilters() {
+    $('filters').innerHTML =
+      '<label>Search<input id="q" type="search" placeholder="Title, country, sector" value="' + esc(state.q) + '"></label>' +
+      select('sector', 'Sector', uniq('sector')) + select('scope', 'Scope', D.scopes) +
+      D.metrics.map(function (m) { return select(m.key, m.label, D.levels, m.help); }).join('') +
+      '<button class="btn' + (state.quick ? ' on' : '') + '" id="quick" title="High impact, and nothing rated high on cost, difficulty or resistance">Quick wins</button>' +
+      '<button class="btn" id="clear">Clear</button><span class="count" id="count"></span>';
+  }
+
+  var COLS = [['id', '#'], ['title', 'Reform'], ['sector', 'Sector'], ['countries', 'From']]
+    .concat(D.metrics.map(function (m) { return [m.key, m.label, m.help]; }))
+    .concat([['score', 'Score', 'Out of 100. Impact counts double; low cost, difficulty, resistance and time score higher.'], ['status', 'Status']]);
+
+  function renderTable() {
+    $('thead').innerHTML = '<tr>' + COLS.map(function (c) {
+      var arrow = state.sort === c[0] ? (state.dir > 0 ? ' ▲' : ' ▼') : '';
+      return '<th data-sort="' + c[0] + '" title="' + esc(c[2] || '') + '">' + c[1] + arrow + '</th>';
+    }).join('') + '</tr>';
+
+    var rows = visible();
+    $('count').textContent = rows.length + ' of ' + D.reforms.length;
+    if (!rows.length) { $('tbody').innerHTML = '<tr><td class="empty" colspan="' + COLS.length + '">No reforms match these filters.</td></tr>'; return; }
+    $('tbody').innerHTML = rows.map(function (r) {
+      return '<tr data-id="' + r.id + '"><td class="num">' + r.id + '</td>' +
+        '<td><div class="title">' + esc(r.title) + '</div><div class="sub">' + esc(r.summary) + '</div></td>' +
+        '<td><span class="pill plain">' + esc(r.sector) + '</span></td><td>' + esc(r.countries.join(', ')) + '</td>' +
+        D.metrics.map(function (m) { return '<td>' + pill(m, r[m.key]) + '</td>'; }).join('') +
+        '<td class="score">' + r.score + '</td><td><span class="pill plain">' + esc(r.status) + '</span></td></tr>';
+    }).join('');
+  }
+
+  // --- Minimal markdown renderer: enough for proposals, no dependencies. ---
+  function href(u, base) { return /^(https?:|mailto:|#)/i.test(u) ? u : base + '/' + u; }
+  function inline(s, base) {
+    var codes = [];
+    s = esc(s).replace(/`([^`]+)`/g, function (_, c) { codes.push(c); return '\u0001' + (codes.length - 1) + '\u0001'; });
+    s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function (_, a, u) { return '<img alt="' + a + '" src="' + href(u, base) + '" onerror="this.replaceWith(Object.assign(document.createElement(\'em\'),{textContent:\'[image not added yet: \'+this.alt+\']\'}))">'; });
+    s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) { return '<a href="' + href(u, base) + '" target="_blank" rel="noopener">' + t + '</a>'; });
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>');
+    return s.replace(/\u0001(\d+)\u0001/g, function (_, i) { return '<code>' + codes[i] + '</code>'; });
+  }
+  var LIST = /^\s*([-*]|\d+\.)\s+(.*)$/;
+  function cells(line) { return line.trim().replace(/^\||\|$/g, '').split('|').map(function (c) { return c.trim(); }); }
+  function md(src, base) {
+    var L = src.split('\n'), out = [], i = 0, m;
+    function blockStart(l) { return /^(#{1,6}\s|```|>|\s*([-*]|\d+\.)\s)/.test(l) || /^(-{3,}|\*{3,})\s*$/.test(l); }
+    while (i < L.length) {
+      var l = L[i];
+      if (!l.trim()) { i++; continue; }
+      if (/^```/.test(l)) {
+        var code = []; i++;
+        while (i < L.length && !/^```/.test(L[i])) code.push(L[i++]);
+        i++; out.push('<pre><code>' + esc(code.join('\n')) + '</code></pre>'); continue;
+      }
+      if ((m = /^(#{1,6})\s+(.*)$/.exec(l))) { out.push('<h' + m[1].length + '>' + inline(m[2], base) + '</h' + m[1].length + '>'); i++; continue; }
+      if (/^(-{3,}|\*{3,})\s*$/.test(l)) { out.push('<hr>'); i++; continue; }
+      if (/^>/.test(l)) {
+        var q = [];
+        while (i < L.length && /^>/.test(L[i])) q.push(L[i++].replace(/^>\s?/, ''));
+        out.push('<blockquote>' + md(q.join('\n'), base) + '</blockquote>'); continue;
+      }
+      if (l.indexOf('|') >= 0 && i + 1 < L.length && /^\s*\|?\s*:?-{2,}/.test(L[i + 1]) && L[i + 1].indexOf('|') >= 0) {
+        var t = '<table><thead><tr>' + cells(l).map(function (c) { return '<th>' + inline(c, base) + '</th>'; }).join('') + '</tr></thead><tbody>';
+        i += 2;
+        while (i < L.length && L[i].trim() && L[i].indexOf('|') >= 0) t += '<tr>' + cells(L[i++]).map(function (c) { return '<td>' + inline(c, base) + '</td>'; }).join('') + '</tr>';
+        out.push(t + '</tbody></table>'); continue;
+      }
+      if ((m = LIST.exec(l))) {
+        var tag = /\d/.test(m[1]) ? 'ol' : 'ul', items = [];
+        while (i < L.length && (m = LIST.exec(L[i]))) {
+          var text = m[2]; i++;
+          while (i < L.length && L[i].trim() && /^\s{2,}/.test(L[i]) && !LIST.test(L[i])) text += ' ' + L[i++].trim();
+          var box = /^\[([ xX])\]\s+(.*)$/.exec(text);
+          items.push(box ? '<li class="task"><input type="checkbox" disabled' + (box[1] === ' ' ? '' : ' checked') + '> ' + inline(box[2], base) + '</li>' : '<li>' + inline(text, base) + '</li>');
+        }
+        out.push('<' + tag + '>' + items.join('') + '</' + tag + '>'); continue;
+      }
+      var p = [];
+      while (i < L.length && L[i].trim() && !(p.length && blockStart(L[i]))) p.push(L[i++]);
+      out.push('<p>' + inline(p.join(' '), base) + '</p>');
+    }
+    return out.join('\n');
+  }
+
+  function renderDrawer() {
+    var r = D.reforms.filter(function (x) { return x.id === state.open; })[0];
+    document.body.classList.toggle('open', !!r);
+    if (!r) return;
+    var tabs = [['proposal', 'Proposal'], ['presentation', 'Presentation'], ['images', 'Images (' + r.images.length + ')']];
+    $('dhead').innerHTML = '<h2>' + esc(r.title) + '</h2><div class="path">' + esc(r.path) + '</div><div class="dmeta">' +
+      D.metrics.map(function (m) { return '<span class="pill ' + tone(m, r[m.key]) + '" title="' + esc(m.help) + '"><b>' + m.label + ':</b> ' + r[m.key] + '</span>'; }).join('') +
+      '<span class="pill plain"><b>Score:</b> ' + r.score + '</span><span class="pill plain">' + esc(r.status) + '</span>' +
+      (r.video ? '<a class="pill plain" href="' + esc(r.video) + '" target="_blank" rel="noopener">Watch video</a>' : '') + '</div>' +
+      '<div class="dtabs">' + tabs.map(function (t) { return '<button class="tab' + (state.dtab === t[0] ? ' on' : '') + '" data-dtab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
+
+    var body;
+    if (state.dtab === 'images') {
+      body = r.images.length
+        ? '<div class="grid">' + r.images.map(function (f) { var u = r.path + '/images/' + encodeURIComponent(f); return '<figure><a href="' + u + '" target="_blank"><img src="' + u + '" alt="' + esc(f) + '"></a><figcaption>' + esc(f) + '</figcaption></figure>'; }).join('') + '</div>'
+        : '<p class="empty">No images yet. Add them to <code>' + esc(r.path) + '/images/</code> and rebuild.</p>';
+    } else {
+      body = r[state.dtab] ? md(r[state.dtab], r.path) : '<p class="empty">Nothing written yet.</p>';
+    }
+    $('dbody').innerHTML = body;
+    $('dbody').scrollTop = 0;
+  }
+
+  function open(id) { state.open = id; state.dtab = 'proposal'; history.replaceState(null, '', id ? '#' + id : location.pathname + location.search); renderDrawer(); }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target, el;
+    if ((el = t.closest('[data-status]'))) { state.status = el.dataset.status; renderTabs(); renderTable(); }
+    else if ((el = t.closest('[data-sort]')) && el.closest('#thead')) {
+      var k = el.dataset.sort;
+      if (state.sort === k) state.dir = -state.dir; else { state.sort = k; state.dir = k === 'score' ? -1 : 1; }
+      renderTable();
+    }
+    else if ((el = t.closest('[data-dtab]'))) { state.dtab = el.dataset.dtab; renderDrawer(); }
+    else if (t.id === 'quick') { state.quick = !state.quick; t.classList.toggle('on', state.quick); renderTable(); }
+    else if (t.id === 'clear') {
+      state.q = state.sector = state.scope = ''; state.quick = false;
+      D.metrics.forEach(function (m) { state[m.key] = ''; });
+      renderFilters(); renderTable();
+    }
+    else if (t.id === 'close' || t.id === 'shade') open(null);
+    else if ((el = t.closest('#tbody tr[data-id]'))) open(el.dataset.id);
+  });
+  document.addEventListener('change', function (e) { var k = e.target.dataset.key; if (k) { state[k] = e.target.value; renderTable(); } });
+  document.addEventListener('input', function (e) { if (e.target.id === 'q') { state.q = e.target.value; renderTable(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') open(null); });
+
+  renderTabs(); renderFilters(); renderTable();
+  if (location.hash.length > 1) { state.open = location.hash.slice(1); renderDrawer(); }
+})();
+</script>
+</body>
+</html>
